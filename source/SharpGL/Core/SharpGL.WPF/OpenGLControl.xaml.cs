@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using System.Windows.Interop;
 using SharpGL.RenderContextProviders;
 using SharpGL.SceneGraph;
 using SharpGL.Version;
@@ -39,7 +40,7 @@ namespace SharpGL.WPF
         {
             SizeChanged += OpenGLControl_SizeChanged;
 
-            UpdateOpenGLControl((int) RenderSize.Width, (int) RenderSize.Height);
+            UpdateOpenGLControl((int)RenderSize.Width, (int)RenderSize.Height);
 
             //  DispatcherTimer setup
             timer.Tick += new EventHandler(timer_Tick);
@@ -66,7 +67,7 @@ namespace SharpGL.WPF
         /// <param name="e">The <see cref="System.Windows.SizeChangedEventArgs"/> Instance containing the event data.</param>
         void OpenGLControl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            UpdateOpenGLControl((int) e.NewSize.Width, (int) e.NewSize.Height);
+            UpdateOpenGLControl((int)e.NewSize.Width, (int)e.NewSize.Height);
         }
 
         /// <summary>
@@ -98,7 +99,7 @@ namespace SharpGL.WPF
                         gl.LoadIdentity();
 
                         // Calculate The Aspect Ratio Of The Window
-                        gl.Perspective(45.0f, (float) width/(float) height, 0.1f, 100.0f);
+                        gl.Perspective(45.0f, (float)width / (float)height, 0.1f, 100.0f);
 
                         gl.MatrixMode(OpenGL.GL_MODELVIEW);
                         gl.LoadIdentity();
@@ -116,11 +117,19 @@ namespace SharpGL.WPF
             //  Call the base.
             base.OnApplyTemplate();
 
+            object parameter = null;
+
+            //  Pass handle to window if RenderContextType is NativeWindow (better performance)
+            if (this.RenderContextType == SharpGL.RenderContextType.NativeWindow)
+            {
+                parameter = ((HwndSource)HwndSource.FromVisual(this)).Handle;
+            }
+
             //  Lock on OpenGL.
             lock (gl)
             {
                 //  Create OpenGL.
-                gl.Create(OpenGLVersion, RenderContextType, 1, 1, 32, null);
+                gl.Create(OpenGLVersion, RenderContextType, 1, 1, 32, parameter);
             }
 
             //  Create our fast event args.
@@ -168,7 +177,7 @@ namespace SharpGL.WPF
                 //  Draw the FPS.
                 if (DrawFPS)
                 {
-                    gl.DrawText(5, 5, 1.0f, 0.0f, 0.0f, "Courier New", 12.0f,  string.Format("Draw Time: {0:0.0000} ms ~ {1:0.0} FPS", frameTime, 1000.0 / frameTime));
+                    gl.DrawText(5, 5, 1.0f, 0.0f, 0.0f, "Courier New", 12.0f, string.Format("Draw Time: {0:0.0000} ms ~ {1:0.0} FPS", frameTime, 1000.0 / frameTime));
                     gl.Flush();
                 }
 
@@ -217,7 +226,7 @@ namespace SharpGL.WPF
                 stopwatch.Stop();
 
                 //  Store the frame time.
-                frameTime = stopwatch.Elapsed.TotalMilliseconds;      
+                frameTime = stopwatch.Elapsed.TotalMilliseconds;
             }
         }
 
@@ -274,7 +283,7 @@ namespace SharpGL.WPF
         /// The OpenGL instance.
         /// </summary>
         private OpenGL gl = new OpenGL();
-        
+
         /// <summary>
         /// The dispatcher timer.
         /// </summary>
@@ -307,7 +316,7 @@ namespace SharpGL.WPF
         /// </summary>
         [Description("Called when the control is resized - you can use this to do custom viewport projections."), Category("SharpGL")]
         public event OpenGLEventHandler Resized;
-        
+
         /// <summary>
         /// The frame rate dependency property.
         /// </summary>
