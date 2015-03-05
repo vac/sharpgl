@@ -3,14 +3,21 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="2D Drawing Sample" Height="350" Width="525" xmlns:my="clr-namespace:SharpGL.WPF;assembly=SharpGL.WPF">
     <Grid>
-        <DockPanel>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="248*"/>
+            <ColumnDefinition Width="269*"/>
+        </Grid.ColumnDefinitions>
+        <DockPanel Grid.ColumnSpan="2">
             <ToolBarPanel DockPanel.Dock="Top">
                 <ToolBar>
                     <Button Content="Randomise!" Click="Button_Click" />
                 </ToolBar>
             </ToolBarPanel>
-        <my:OpenGLControl Name="openGLControl1" OpenGLDraw="openGLControl1_OpenGLDraw" 
-                          Resized="openGLControl1_Resized" />
+                <my:OpenGLHostedControl 
+                    Name="openGLControl1" 
+                    OpenGLDraw="openGLControl1_OpenGLDraw" 
+                    Resized="openGLControl1_Resized" 
+                    DrawFPS="True" />
         </DockPanel>
     </Grid>
 </Window>

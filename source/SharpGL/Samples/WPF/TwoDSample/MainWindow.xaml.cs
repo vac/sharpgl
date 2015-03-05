@@ -96,14 +96,14 @@ namespace TwoDSample
         private void CreateShapes()
         {
             //  Create some shapes...
-            int shapeCount = random.Next(2, 5);
+            int shapeCount = 1000;//random.Next(2, 5);
             for(int i = 0; i < shapeCount; i++)
             {
                 //  Create the shape.
                 var shape = new CrazyShape{Red = RandomFloat(), Green = RandomFloat(),Blue = RandomFloat()};
 
                 //  Create the points.
-                int pointCount = random.Next(3, 6);
+                int pointCount = 5;//random.Next(3, 6);
                 for(int j=0; j < pointCount; j++)
                     shape.Points.Add(new ShapePoint
                                          {

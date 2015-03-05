@@ -72,6 +72,10 @@
       <Link>Properties\SharedAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="CollectionCountToVisibilityConverter.cs" />
+    <Compile Include="GLHwndHost.cs" />
+    <Compile Include="OpenGLHostedControl.xaml.cs">
+      <DependentUpon>OpenGLHostedControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SceneTree\SceneTree.xaml.cs">
       <DependentUpon>SceneTree.xaml</DependentUpon>
     </Compile>
@@ -81,6 +85,10 @@
     <Page Include="OpenGLControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="OpenGLHostedControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="SceneTree\SceneTree.xaml">
       <SubType>Designer</SubType>
